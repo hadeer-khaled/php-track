@@ -1,0 +1,25 @@
+MVC Pattern
+M--> Model 
+V--> View
+Controller-> Logic
+---------------------------------------------------------------------
+
+							----> JsonResp
+Request Flow: web.php (api.php) routes --> Controller --> 
+						|	----> view 
+						|
+					      Model
+
+---------------------------------------------------------------------------
+php artisan serve
+php artisan make:controller PostController --resource
+php artisan make
+php artisan list make
+
+----------------------------------------------------------------------------
+Resource: Post
+PostController.php
+Post.php
+posts
+/posts/id
+----------------------------------------------------------------------------
