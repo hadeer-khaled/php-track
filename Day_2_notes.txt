@@ -1,0 +1,119 @@
+php artisan make:migration create\_posts\_table
+
+php artisan migrate 
+
+
+https://laravel.com/docs/12.x/migrations#introduction
+
+
+### Migrate Options
+
+
+
+###### **php artisan migrate** 
+
+ Runs all the migrations that haven't been run yet.
+
+
+
+###### **php artisan migrate: fresh**       
+
+drops all tables in the database(without rollback) and then runs all migrations from scratch.
+
+
+
+###### **php artisan migrate: refresh**         
+
+rolls back all migrations and then runs them again.
+
+It doesn’t drop the tables directly but uses the migration rollback mechanism.
+
+Options:
+
+--seed → also run the seeders after refreshing.
+
+
+
+###### **php artisan migrate: reset**           
+
+Rollback all database migrations
+
+
+
+###### **php artisan migrate: rollback** 
+
+Reverses the last "batch" of migrations. (from down method)
+
+Example: If 3 migrations were run together, rollback will undo all 3.
+
+Options:
+
+--step=1 → rollback only the last migration (not the whole batch)
+
+
+
+###### **php artisan migrate: status**       
+
+Show the status of each migration
+
+-------------------------------------------------------------
+DB Fasades
+
+https://laravel.com/docs/12.x/queries
+
+
+-------------------------------------------------------------
+
+Eloquent
+
+
+https://laravel.com/docs/12.x/eloquent
+php artisan make:model Post -fsrR (factory seeder resource Request)
+
+
+-----------------------------------------
+
+
+
+php artisan make:factory PostFactory --model=Post
+php artisan make:seeder PostSeeder
+php artisan tinker
+https://laravel.com/docs/master/artisan#usage
+\App\Models\Post::factory()->count(5)->create();
+
+------------------------------------------------------------------
+
+
+users          posts              
+   1             m
+   1		 1
+
+= 1 : m
+
+
+
+N+1 Q
+100 user ---> 1 q 
+loop(users as $user) (100){ 100q
+	select * from posts where user_id = user_id;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

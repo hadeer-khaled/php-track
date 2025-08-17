@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Post;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -11,38 +14,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = [
-            [
-                'id' => 1,
-                'title' => 'Getting Started with Laravel 12',
-                'description' => 'Learn how to install Laravel 12, configure your environment, and create your first route.'
-            ],
-            [
-                'id' => 2,
-                'title' => 'Understanding MVC Architecture',
-                'description' => 'A beginner-friendly explanation of the Model-View-Controller pattern and how Laravel uses it.'
-            ],
-            [
-                'id' => 3,
-                'title' => 'Building Your First Blade Template',
-                'description' => 'Create and extend Blade templates to design dynamic and reusable layouts in Laravel.'
-            ],
-            [
-                'id' => 4,
-                'title' => 'Introduction to Eloquent ORM',
-                'description' => 'Learn how to work with databases using Laravel’s Eloquent ORM, models, and relationships.'
-            ],
-            [
-                'id' => 5,
-                'title' => 'Handling Forms and Validation',
-                'description' => 'Build secure forms, validate user input, and display error messages using Blade templates.'
-            ],
-        ];
+        // DB Facade 
+        // $posts = DB::table('posts')->get(); // collection of objects
 
-        // foreach ($posts as $post) {
-        //     echo "<h2>{$post['title']}</h2>";
-        //     echo "<hr>";
-        // };
+        // Eloquent
+        $posts = Post::all();
 
         return view('posts.index', ['posts' => $posts]);
     }
@@ -53,7 +29,9 @@ class PostController extends Controller
     public function create()
     {
         // Create Form View
-        return 'create';
+        // return 'create';
+        $users = User::all();
+        return view('posts.create', compact('users'));
     }
 
     /**
@@ -61,7 +39,29 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // store in database
+        // DB Facade    
+        // DB::table('posts')->insert(
+        //     [
+        //         'title'=> $request->title,
+        //         'content'=> $request->content
+        //     ]
+        // );
+
+        //Elequent
+        // $post = new Post();
+        // $post->title = $request->title;
+        // $post->content = $request->content;
+        // $post->save();
+
+
+        // Elequent Mass Assignment
+        Post::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_id' => $request->user_id,
+        ]);
+
+        return redirect()->route('posts.index')->with('success', 'Post created successfully!');
     }
 
     /**
@@ -69,41 +69,15 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $posts = [
-            [
-                'id' => 1,
-                'title' => 'Getting Started with Laravel 12',
-                'description' => 'Learn how to install Laravel 12, configure your environment, and create your first route.'
-            ],
-            [
-                'id' => 2,
-                'title' => 'Understanding MVC Architecture',
-                'description' => 'A beginner-friendly explanation of the Model-View-Controller pattern and how Laravel uses it.'
-            ],
-            [
-                'id' => 3,
-                'title' => 'Building Your First Blade Template',
-                'description' => 'Create and extend Blade templates to design dynamic and reusable layouts in Laravel.'
-            ],
-            [
-                'id' => 4,
-                'title' => 'Introduction to Eloquent ORM',
-                'description' => 'Learn how to work with databases using Laravel’s Eloquent ORM, models, and relationships.'
-            ],
-            [
-                'id' => 5,
-                'title' => 'Handling Forms and Validation',
-                'description' => 'Build secure forms, validate user input, and display error messages using Blade templates.'
-            ],
-        ];
+        // $post = DB::table('posts')->where('id', $id)->first();
+        // $post = DB::table('posts')->where('id', $id)->firstOrFail();
 
-        foreach ($posts as $post) {
-            if ($post['id'] == $id) {
-            //    return view('posts.show', ['post' => $post ,'id' => $id ]);
-               return view('posts.show', compact('post'));
-            }
-        }
-        return "Post not found.";
+        // if (!$post) {
+        //     return redirect()->route('posts.index')->with('error', 'Post not found!');
+        // }
+
+        $post = Post::findOrFail($id);
+        return view('posts.show', compact('post'));
 
     }
 
@@ -112,41 +86,11 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $posts = [
-            [
-                'id' => 1,
-                'title' => 'Getting Started with Laravel 12',
-                'description' => 'Learn how to install Laravel 12, configure your environment, and create your first route.'
-            ],
-            [
-                'id' => 2,
-                'title' => 'Understanding MVC Architecture',
-                'description' => 'A beginner-friendly explanation of the Model-View-Controller pattern and how Laravel uses it.'
-            ],
-            [
-                'id' => 3,
-                'title' => 'Building Your First Blade Template',
-                'description' => 'Create and extend Blade templates to design dynamic and reusable layouts in Laravel.'
-            ],
-            [
-                'id' => 4,
-                'title' => 'Introduction to Eloquent ORM',
-                'description' => 'Learn how to work with databases using Laravel’s Eloquent ORM, models, and relationships.'
-            ],
-            [
-                'id' => 5,
-                'title' => 'Handling Forms and Validation',
-                'description' => 'Build secure forms, validate user input, and display error messages using Blade templates.'
-            ],
-        ];
+        // $post = DB::table('posts')->where('id', $id)->firstOrFail();
 
-        foreach($posts as $post){
-            if($post['id'] == $id) {
-                // return view('posts.edit', ['post' => $post]);
-                return view('posts.edit', compact('post'));
-            }
-        }
-        return 'not found';
+        $post = Post::findOrFail($id);
+        $users = User::all();
+        return view('posts.edit', compact('post', 'users'));
     }
 
     /**
@@ -154,9 +98,28 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Update in database
-        // return $id ;   
-        return $request->input('title');
+        // DB::table('posts')->where('id', $id)->update(
+        //     [
+        //         'title' => $request->title,
+        //         'content' => $request->content
+        //     ]
+        // );
+
+        // Eloquent
+        $post = Post::findOrFail($id);
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->save();
+
+
+        // Eloquent Mass Assignment
+        Post::where('id',$id)->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_id' => $request->user_id, 
+        ]);
+
+        return redirect()->route('posts.index')->with('success', 'Post updated successfully!');
     }
 
     /**
@@ -164,6 +127,12 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // DB::table('posts')->where('id', $id)->delete();
+
+
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return redirect()->route('posts.index')->with('success', 'Post deleted successfully!');
     }
 }

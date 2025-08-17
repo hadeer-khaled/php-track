@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,14 +14,14 @@ Route::get('/test', function (){
 
 // Protocol:://domain ----> path endpoit( resource / {parameter} / sub-resource)
 
-Route::get('users/{id}' , function ($id) {
-    return "User ID: " . $id;
-})->where('id', '[0-9]+');
+// Route::get('users/{id}' , function ($id) {
+//     return "User ID: " . $id;
+// })->where('id', '[0-9]+');
 
-// Optional Parameters
-Route::get('users/{name?}' , function ($name = 'Guest') {
-    return "User Name: " . $name;
-});
+// // Optional Parameters
+// Route::get('users/{name?}' , function ($name = 'Guest') {
+//     return "User Name: " . $name;
+// });
 
 
 // Named Routes
@@ -34,10 +35,10 @@ Route::get('redirect-to-profile', function () {
 });
 
 
-Route::fallback(function () {
-    return '404 - Not Found';
-    // return view('errors.404');
-});
+// Route::fallback(function () {
+//     return '404 - Not Found';
+//     // return view('errors.404');
+// });
 
 
 
@@ -55,3 +56,4 @@ Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 
 // Route::resource('posts', PostController::class);
+Route::resource('users', UserController::class);

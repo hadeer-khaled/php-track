@@ -1,34 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Update Post')
+@section('title', 'Craete New Post')
 
 @section('content')
 <div class="w-full max-w-xs">
-  <form action="{{route('posts.update' , $post->id)}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <form action="{{route('posts.store')}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
   @csrf
   <!-- <input type="hidden" name="_token" value="gdhdjdopdjdpjdvsdl">   -->
-  @method('PUT')
     <!-- <input type="hidden" name="_method" value="PUT"> -->
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
         Title
       </label>
       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-       id="title" type="text" placeholder="Title" value="{{ $post->title }}" name="title">
+       id="title" type="text" placeholder="Title" name="title">
     </div>
     <div class="mb-6">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="content">
         content
       </label>
       <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="content" placeholder="content" name="content">
-        {{ $post->content }}
+        
       </textarea>
     </div>
 
-
-    <div class="mb-4"> Author: {{$post->user->name}}</div>
-
-        <div class="mb-4">
+    <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="user_id">
         Select User
       </label>
@@ -37,13 +33,11 @@
           <option value="{{ $user->id }}">{{ $user->name }}</option>
         @endforeach
       </select>
-      
     </div>
-
 
     <div class="flex items-center justify-between">
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-        Update Post
+        Create New Post
       </button>
     </div>
   </form>
