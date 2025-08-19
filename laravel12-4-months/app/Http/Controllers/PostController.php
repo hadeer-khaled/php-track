@@ -18,7 +18,7 @@ class PostController extends Controller
         // $posts = DB::table('posts')->get(); // collection of objects
 
         // Eloquent
-        $posts = Post::all();
+        $posts = Post::all(); // return row where deleted_at = null
 
         return view('posts.index', ['posts' => $posts]);
     }
@@ -54,12 +54,20 @@ class PostController extends Controller
         // $post->save();
 
 
-        // Elequent Mass Assignment
-        Post::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'user_id' => $request->user_id,
+        $validated = $request->validate([
+            'title'=> 'required|string|max:5',
+            'content' => 'required|min:10',
+            'user_id' => 'required|exists:users,id'
         ]);
+
+        // Elequent Mass Assignment
+        // Post::create($validated);
+        Post::create([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'user_id' => $validated['user_id'],
+        ]);
+
 
         return redirect()->route('posts.index')->with('success', 'Post created successfully!');
     }
@@ -67,7 +75,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Post $post)
     {
         // $post = DB::table('posts')->where('id', $id)->first();
         // $post = DB::table('posts')->where('id', $id)->firstOrFail();
@@ -76,8 +84,9 @@ class PostController extends Controller
         //     return redirect()->route('posts.index')->with('error', 'Post not found!');
         // }
 
-        $post = Post::findOrFail($id);
-        return view('posts.show', compact('post'));
+        // $post = Post::findOrFail($id);
+        $users = User::all();
+        return view('posts.show', compact('post', 'users'));
 
     }
 
@@ -129,10 +138,29 @@ class PostController extends Controller
     {
         // DB::table('posts')->where('id', $id)->delete();
 
-
         $post = Post::findOrFail($id);
         $post->delete();
+        // update deleted_at = now() where id = $id
 
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully!');
+    }
+
+    public function trashed(){
+        $posts = Post::onlyTrashed()->get(); // return row where deleted_at != null
+        return view('posts.trashed', compact('posts'));
+    }
+
+
+    public function restore(string $id){
+        $post =Post::onlyTrashed()->findOrFail($id); // NOT FOUND
+        // $post = Post::withTrashed()->findOrFail($id); // if you want to get the post even if it is not trashe
+        $post->restore(); // restore the post
+        return redirect()->route('posts.index')->with('success', 'Post restored successfully!');
+    }
+
+
+    public function forceDelete(string $id){
+        Post::onlyTrashed()->findOrFail($id)->forceDelete(); // permanently delete the post
+        return redirect()->route('posts.index')->with('success', 'Post permanently deleted successfully!');
     }
 }

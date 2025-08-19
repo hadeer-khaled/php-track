@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -47,8 +48,11 @@ Route::get('redirect-to-profile', function () {
 // Routes with controller
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
+Route::get('posts/trashed', [PostController::class, 'trashed'])->name('posts.trashed');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore');
+Route::get('/posts/{id}/force-delete', [PostController::class, 'forceDelete'])->name('posts.forceDelete');
 
 Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
@@ -57,3 +61,6 @@ Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.de
 
 // Route::resource('posts', PostController::class);
 Route::resource('users', UserController::class);
+
+// Route::resource('comments', CommentController::class);
+Route::post('/posts/{id}/comment', [CommentController::class, 'store'])->name('comments.store');

@@ -24,9 +24,8 @@
                         <!-- <a href="/posts" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Posts</a> -->
                         <a href="{{route('posts.index')}}" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Posts</a>
 
-                        <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Team</a>
-                        <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Projects</a>
-                        <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Calendar</a>
+                        <a href="{{route('posts.create')}}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Create New Post</a>
+                        <a href="{{route('posts.trashed')}}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Trashed Posts</a>
                     </div>
                     </div>
                 </div>

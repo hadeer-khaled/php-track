@@ -13,12 +13,8 @@
         <div class="max-w-sm rounded overflow-hidden shadow-lg">
         <div class="px-6 py-4">
             <div class="font-bold text-xl mb-2">{{$post->title}}</div>
-            <div class="font-bold text-xl mb-2">{{$post->created_at}}</div>
-
         </div>
-        <div class="px-6 py-4">
-            <a href="{{ route('posts.show', $post->id) }}" class="text-blue-500 hover:underline">View Details</a>
+            <a href="{{route('posts.forceDelete', $post->id)}}">Force Delete Post</a>
         </div>
-    </div>
     @endforeach
 @endsection

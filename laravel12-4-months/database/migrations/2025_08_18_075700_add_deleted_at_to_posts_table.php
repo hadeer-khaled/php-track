@@ -12,18 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->renameColumn('description', 'content');
+            $table->softDeletes(); // create deleted_at column
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void // rollback
+    public function down(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->renameColumn('content', 'description');
+            $table->dropSoftDeletes();
         });
-        
     }
 };

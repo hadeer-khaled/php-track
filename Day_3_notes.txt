@@ -1,0 +1,25 @@
+comments table has relations with (posts, images, videos)
+
+id    content         post_id    image_id     video_id        users_id
+
+1      post comment      5         null         nulll
+2      img comment       null       2         nulll
+
+
+
+With Morph Realtion 
+
+id    content          commentable_id      commentable_type       users_id
+1      post comment       5                App\Models\Post
+2       img comment       5                App\Models\Image
+
+
+
+
+Comments (morph)
+Form Request update , create 
+soft delete (restore, forcedelete, trashed)
+formatting (accessor)
+
+
+--> queue & job
