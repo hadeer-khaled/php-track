@@ -1,9 +1,11 @@
+<x-app-layout>
 
-@extends('layouts.app')
+    <x-slot name="header">
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+          {{ __('View Post') }}
+      </h2>
+  </x-slot>
 
-@section('title', 'Post Details')
-
-@section('content')
 <div class="max-w-sm rounded overflow-hidden shadow-lg">
 <div class="px-6 py-4">
     <div class="font-bold text-xl mb-2">{{$post->title}}</div>
@@ -41,4 +43,5 @@
       </form>
     </div>
 </div>
-@endsection
+</x-app-layout>
+

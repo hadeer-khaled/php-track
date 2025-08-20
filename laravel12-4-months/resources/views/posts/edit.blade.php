@@ -1,8 +1,11 @@
-@extends('layouts.app')
+<x-app-layout>
 
-@section('title', 'Update Post')
+    <x-slot name="header">
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+          {{ __('Edit Post') }}
+      </h2>
+  </x-slot>
 
-@section('content')
 <div class="w-full max-w-xs">
   <form action="{{route('posts.update' , $post->id)}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
   @csrf
@@ -51,4 +54,5 @@
     &copy;2020 Acme Corp. All rights reserved.
   </p>
 </div>
-@endsection
+
+</x-app-layout>

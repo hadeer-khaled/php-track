@@ -1,9 +1,10 @@
 
-@extends('layouts.app')
-
-@section('title', 'Posts')
-
-@section('content')
+<x-app-layout>
+    <x-slot name="header">
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+          {{ __('Trashed Posts') }}
+      </h2>
+  </x-slot>
 @if(session('success'))
     <div class="bg-green-500 text-white p-4 rounded">
         {{ session('success') }}
@@ -17,4 +18,4 @@
             <a href="{{route('posts.forceDelete', $post->id)}}">Force Delete Post</a>
         </div>
     @endforeach
-@endsection
+</x-app-layout>
