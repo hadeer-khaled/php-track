@@ -12,6 +12,7 @@
         {{ session('success') }}
     </div>
 @endif
+
     @foreach($posts as $post)
         <div class="max-w-sm rounded overflow-hidden shadow-lg">
         <div class="px-6 py-4">
@@ -20,7 +21,9 @@
 
         </div>
         <div class="px-6 py-4">
-            <a href="{{ route('posts.show', $post->id) }}" class="text-blue-500 hover:underline">View Details</a>
+            <x-button type="button" class="bg-blue-500 hover:bg-blue-700">
+                <a href="{{ route('posts.show', $post->id) }}">View Details</a>
+            </x-button>
         </div>
     </div>
     @endforeach

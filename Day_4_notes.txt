@@ -1,0 +1,7 @@
+Authentication
+authorization (Admin Only)
+image validation 
+create: preview image 
+show: original image name 
+update and delete image 
+accessor for image url

@@ -6,7 +6,7 @@
   </x-slot>
 
 <div class="w-full max-w-xs">
-  <form action="{{route('posts.store')}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <form action="{{route('posts.store')}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data">
   @csrf
   <!-- <input type="hidden" name="_token" value="gdhdjdopdjdpjdvsdl">   -->
     <!-- <input type="hidden" name="_method" value="PUT"> -->
@@ -49,6 +49,10 @@
         Create New Post
       </button>
     </div>
+
+    <label > Image</label>
+    <input type="file" name="image" class="block w-full text-sm text-gray-500>
+
   </form>
   <p class="text-center text-gray-500 text-xs">
     &copy;2020 Acme Corp. All rights reserved.

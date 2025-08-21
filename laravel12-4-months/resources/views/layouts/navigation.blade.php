@@ -15,15 +15,23 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
-                        {{ __('All Posts') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('posts.create')" :active="request()->routeIs('posts.create')">
-                        {{ __('Create new post') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('posts.trashed')" :active="request()->routeIs('posts.trashed')">
-                        {{ __('Trashed Posts') }}
-                    </x-nav-link>
+                     @if(!Auth::user()->is_admin)
+                        <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
+                            {{ __('All Posts') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('posts.create')" :active="request()->routeIs('posts.create')">
+                            {{ __('Create new post') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if(Auth::user()->is_admin)
+                        <x-nav-link :href="route('posts.trashed')" :active="request()->routeIs('posts.trashed')">
+                            {{ __('Trashed Posts') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                            {{ __('Users List') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

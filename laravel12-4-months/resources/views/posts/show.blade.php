@@ -12,6 +12,11 @@
     <div class="font-bold text-xl mb-2">{{$post->content}}</div>
     <div class="font-bold text-xl mb-2">{{$post->user->name}}</div>
     <div class="font-bold text-xl mb-2">{{$post->created_at}}</div>
+    <div>
+      @if($post->image_path)
+        <img src="{{ asset('storage/' . $post->image_path) }}" alt="Post Image" class="w-full h-auto">
+        @endif
+    </div>
 </div>
  
 <div>
@@ -30,7 +35,9 @@
       </div>
 
         <input type="text" name="content" placeholder="Add a comment...">
-        <button type="submit">Add Comment</button>
+        <x-button type="submit" class="bg-blue-500 hover:bg-blue-700">
+          Add Comment
+        </x-button>
     </form>
 </div>
     <div>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -62,12 +63,13 @@ class PostController extends Controller
 
         // Elequent Mass Assignment
         // Post::create($validated);
+
         Post::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
             'user_id' => $validated['user_id'],
+            'image_path' => $request->hasFile('image') ? $request->file('image')->store('images/posts', 'public') : null ,
         ]);
-
 
         return redirect()->route('posts.index')->with('success', 'Post created successfully!');
     }
@@ -121,11 +123,15 @@ class PostController extends Controller
         $post->save();
 
 
+        // remove old image form storage
+        Storage::disk('public')->delete($post->image_path);
+         
         // Eloquent Mass Assignment
         Post::where('id',$id)->update([
             'title' => $request->title,
             'content' => $request->content,
             'user_id' => $request->user_id, 
+            'image_path' => $request->hasFile('image') ? $request->file('image')->store('images/posts', 'public') : null,
         ]);
 
         return redirect()->route('posts.index')->with('success', 'Post updated successfully!');
@@ -160,6 +166,7 @@ class PostController extends Controller
 
 
     public function forceDelete(string $id){
+        
         Post::onlyTrashed()->findOrFail($id)->forceDelete(); // permanently delete the post
         return redirect()->route('posts.index')->with('success', 'Post permanently deleted successfully!');
     }

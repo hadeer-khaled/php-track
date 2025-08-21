@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -15,9 +16,38 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('/posts')->controller(PostController::class)->group(function () {
+        Route::get('/trashed',  'trashed')->name('posts.trashed')->middleware('admin.only');
+        Route::get('/',  'index')->name('posts.index');
+        Route::get('/create',  'create')->name('posts.create');
+        Route::get('/{post}',  'show')->name('posts.show');
+        Route::get('/{id}/restore',  'restore')->name('posts.restore');
+        Route::get('/{id}/force-delete',  'forceDelete')->name('posts.forceDelete');
+        Route::post('/',  'store')->name('posts.store');
+        Route::get('/{id}/edit',  'edit')->name('posts.edit');
+        Route::put('/{id}',  'update')->name('posts.update');
+        Route::delete('/{id}',  'destroy')->name('posts.destroy');
+    });
+
+    Route::post('/posts/{id}/comment', [CommentController::class, 'store'])->name('comments.store');
+
+    Route::middleware('admin.only')->group(function () {
+        Route::get('/admin/users', [AdminController::class,'usersList'])->name('admin.users.index');
+        Route::patch('/admin/users/{user}/change-role', [AdminController::class, 'changeUserRole'])->name('admin.users.change.role');
+    });
+
+    // Route::resource('posts', PostController::class);
+    Route::resource('users', UserController::class);
+
+    // Route::resource('comments', CommentController::class);
+
+
+
 });
 
 require __DIR__.'/auth.php';
@@ -59,21 +89,4 @@ Route::get('/test', function (){
 
 
 // Routes with controller
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
-Route::get('posts/trashed', [PostController::class, 'trashed'])->name('posts.trashed');
-Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-Route::get('/posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore');
-Route::get('/posts/{id}/force-delete', [PostController::class, 'forceDelete'])->name('posts.forceDelete');
-
-Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
-Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
-Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
-
-// Route::resource('posts', PostController::class);
-Route::resource('users', UserController::class);
-
-// Route::resource('comments', CommentController::class);
-Route::post('/posts/{id}/comment', [CommentController::class, 'store'])->name('comments.store');
