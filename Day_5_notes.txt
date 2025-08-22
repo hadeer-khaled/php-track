@@ -53,3 +53,8 @@ php artisan schedule:run --> Runs Once  (cron job)
 php artisan schedule:work --> Stay alive , check ever minute
 
 _____________________________________________________________________________________________________
+
+API
+----
+
+php artisan install:api
