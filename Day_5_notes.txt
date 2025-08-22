@@ -1,0 +1,55 @@
+Queue & Job (Send welcome mail to user after registration)
+	1- create notification / Mailable class 
+		php artisan make:notification WelcomeNotification
+		OR
+		php artisan make:mail WelcomeMail
+
+	2- create mail template  (skip)
+
+	3- create job to send mail 
+		php artisan make:job SendWelcomMailJob
+
+	4- dispatch job
+		SendWelcomeMailJob::dispatch($user);
+	5- set mail configuration in .env
+		5.1 https://myaccount.google.com/security --> Enable 2-Step Verification (if not already).
+		5.2 Create an App Password: Under “Signing in to Google” → App passwords.
+		5.3 Choose App: Mail, Device: Other (give it a name, e.g. Laravel).
+		5.4 Google will generate a 16-character password.
+		5.5 Copy it (this will replace your real Gmail password in .env).
+	6- use Notifiable trait in user model  
+
+	7- run php artisan queue:work
+
+_______________________________________________________________________________________
+
+Task Schedule
+--------------
+you can define your scheduled tasks in two places:
+  A) routes/console.php
+
+	use Illuminate\Support\Facades\Schedule;
+	Schedule::call(function () {
+    		info(Post::onlyTrashed()->where('deleted_at', '<=', now()->subDays(30))->get());
+    		Post::onlyTrashed()->where('deleted_at', '<=', now()->subDays(30))->forceDelete();
+	})->everyMinute(); //for testing purpose
+
+	OR
+
+	Schedule::call(new DeleteRecentUsers)->daily();  ( DeleteRecentUsers  invokable class ---> --invoke() )
+
+	OR
+
+	Schedule::job(new Heartbeat)->everyFiveMinutes();
+
+
+  B) bootstrap/app.php
+	 use Illuminate\Console\Scheduling\Schedule;
+	->withSchedule(function (Schedule $schedule) {
+   		 $schedule->call(new DeleteRecentUsers)->daily();
+	})
+
+php artisan schedule:run --> Runs Once  (cron job)
+php artisan schedule:work --> Stay alive , check ever minute
+
+_____________________________________________________________________________________________________
