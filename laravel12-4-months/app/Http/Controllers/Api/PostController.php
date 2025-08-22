@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class PostController extends Controller
         $posts = Post::all();
         return response()->json([
             'message' => 'Posts retrieved successfully',
-            'data' => $posts
+            'data' => PostResource::collection($posts)
         ]);
     }
 
@@ -45,7 +46,8 @@ class PostController extends Controller
         }
         return response()->json([
             'message' => 'Post retrieved successfully',
-            'data' => $post
+            'data' => PostResource::make($post)
+            // 'data' => new PostResource:($post)
         ]);
     }
 

@@ -58,3 +58,75 @@ API
 ----
 
 php artisan install:api
+
+
+Login (check password, email ) --> response (token) --> store localstorage
+any onther request  should include token
+--> middleware to check token
+
+------------------------------------
+1- login
+	access token -> 15 min
+	refresh tpken -> 1 hour
+
+2- request (after 15 min)-> access token
+		--> 401
+
+3- refresh token api (refresh token)
+		if refresh token not expired ---> create access token , refresh token
+		else ---> 401 ---> force logout 
+-----------------------------------------
+
+Without Morph
+----------------
+Post --> like , dislike
+Comment --> like , dislike 
+
+Post Table
+---------------------------------------------
+id   title    content    likes       dislikes
+
+
+comment table 
+---------------------------------------------
+id   title    content    likes       dislikes
+
+
+user_post_likes table
+------------------------------------------
+user_id    post_id
+
+
+user_post_dislike table
+------------------------------------------
+user_id    post_ide
+
+
+user_comment_likes table
+------------------------------------------
+user_id    post_id
+
+
+user_comment_dislike table
+------------------------------------------
+user_id    post_ide
+
+_____________________________________________________
+
+With Morph
+---------------------
+Likes (morph relation with comment and post)
+ id   likable_id     likable_type      user_id       
+ 1        2            Post              5
+ 1        2            Comment           5
+			reel
+
+Dislike (morph relation with comment and post)
+ id   likable_id     likable_type      user_id 
+ 1        2            Post              5
+ 1        2            Comment           5
+
+
+--------------------------------------------------------------------
+
+

@@ -26,12 +26,12 @@ class Post extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    protected function createdAt(): Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => Carbon::parse($value)->format('d M Y H:i a')
-        );
-    }
+    // protected function createdAt(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn ($value) => Carbon::parse($value)->format('d M Y H:i a')
+    //     );
+    // }
 
 
 }
